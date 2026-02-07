@@ -15,9 +15,10 @@ const Dashboard = () => {
     const fetchCandidates = async () => {
         try {
             const res = await axios.get('http://localhost:5001/api/candidates');
-            setCandidates(res.data);
+            setCandidates(res.data.data || []);
         } catch (err) {
             console.error('Error fetching candidates:', err);
+            setCandidates([]);
         }
     };
 
