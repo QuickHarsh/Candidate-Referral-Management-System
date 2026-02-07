@@ -1,85 +1,80 @@
-import { useState } from 'react';
-import { FileText, Phone, Mail, Briefcase } from 'lucide-react';
-import axios from 'axios';
+import { Mail, Phone, FileText, Briefcase, ExternalLink } from 'lucide-react';
+import StatusDropdown from './StatusDropdown';
 
 const CandidateCard = ({ candidate, onStatusUpdate }) => {
-    const [loading, setLoading] = useState(false);
 
-    const handleStatusChange = async (e) => {
-        const newStatus = e.target.value;
-        setLoading(true);
+    const handleStatusChange = async (newStatus) => {
         try {
-            // Update port in CandidateCard.jsx
-            const res = await axios.put(`http://localhost:5001/api/candidates/${candidate._id}/status`, {
-                status: newStatus
-            });
-            if (res.data.success) {
-                onStatusUpdate(candidate._id, newStatus);
-            }
+            // Update logic is handled by parent, but we might want optimisic updates or API call here
+            // Assuming parent handles API for now as per original code structure
+            await onStatusUpdate(candidate._id, newStatus);
+
+            // If we need to make the API call here directly:
+            /*
+           const res = await axios.put(`http://localhost:5001/api/candidates/${candidate._id}/status`, {
+               status: newStatus
+           });
+           */
         } catch (err) {
-            console.error('Error updating status:', err);
-            alert('Failed to update status');
-        } finally {
-            setLoading(false);
+            console.error("Failed to update status", err);
         }
     };
 
-    const statusColors = {
-        Pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-        Reviewed: 'bg-blue-100 text-blue-800 border-blue-200',
-        Hired: 'bg-green-100 text-green-800 border-green-200',
-    };
-
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-6">
-            <div className="flex justify-between items-start mb-4">
-                <div>
-                    <h3 className="text-lg font-bold text-gray-900">{candidate.name}</h3>
-                    <div className="flex items-center gap-2 text-gray-500 mt-1">
-                        <Briefcase size={16} />
-                        <span className="text-sm font-medium">{candidate.jobTitle}</span>
+        <div className="card-worko group relative flex flex-col h-full">
+            {/* Header */}
+            <div className="flex justify-between items-start mb-6">
+                <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl flex items-center justify-center shadow-inner text-worko-blue font-bold text-2xl">
+                        {candidate.name.charAt(0)}
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-xl text-gray-900 group-hover:text-worko-blue transition-colors line-clamp-1">
+                            {candidate.name}
+                        </h3>
+                        <div className="flex items-center gap-1.5 text-gray-500 text-sm mt-1 font-medium">
+                            <Briefcase size={14} className="text-worko-lightBlue" />
+                            <span className="line-clamp-1">{candidate.jobTitle}</span>
+                        </div>
                     </div>
                 </div>
-                <select
-                    value={candidate.status}
-                    onChange={handleStatusChange}
-                    disabled={loading}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold border cursor-pointer outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 ${statusColors[candidate.status]}`}
-                >
-                    <option value="Pending">Pending</option>
-                    <option value="Reviewed">Reviewed</option>
-                    <option value="Hired">Hired</option>
-                </select>
+                <StatusDropdown currentStatus={candidate.status} onUpdate={onStatusUpdate} candidateId={candidate._id} />
             </div>
 
-            <div className="space-y-3">
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Mail size={16} className="text-gray-400" />
-                    <a href={`mailto:${candidate.email}`} className="hover:text-blue-600 transition-colors">
-                        {candidate.email}
-                    </a>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Phone size={16} className="text-gray-400" />
-                    <a href={`tel:${candidate.phone}`} className="hover:text-blue-600 transition-colors">
-                        {candidate.phone}
-                    </a>
-                </div>
-
-                {candidate.resumeUrl && (
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                        <a
-                            href={`http://localhost:5001${candidate.resumeUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 mt-2 p-2 bg-blue-50 rounded-lg w-full justify-center hover:bg-blue-100 transition-colors"
-                        >
-                            <FileText size={16} />
-                            View Resume
-                        </a>
+            {/* Content */}
+            <div className="space-y-3 flex-grow">
+                <a href={`mailto:${candidate.email}`} className="flex items-center gap-3 text-gray-600 hover:text-worko-blue transition-colors text-sm p-2.5 rounded-xl hover:bg-blue-50/50 border border-transparent hover:border-blue-100 group/item">
+                    <div className="w-8 h-8 rounded-lg bg-gray-50 group-hover/item:bg-white flex items-center justify-center text-gray-400 group-hover/item:text-worko-blue transition-colors">
+                        <Mail size={16} />
                     </div>
-                )}
+                    <span className="truncate font-medium">{candidate.email}</span>
+                </a>
+                <a href={`tel:${candidate.phone}`} className="flex items-center gap-3 text-gray-600 hover:text-worko-blue transition-colors text-sm p-2.5 rounded-xl hover:bg-blue-50/50 border border-transparent hover:border-blue-100 group/item">
+                    <div className="w-8 h-8 rounded-lg bg-gray-50 group-hover/item:bg-white flex items-center justify-center text-gray-400 group-hover/item:text-worko-blue transition-colors">
+                        <Phone size={16} />
+                    </div>
+                    <span className="font-medium">{candidate.phone}</span>
+                </a>
             </div>
+
+            {/* Footer */}
+            {candidate.resumeUrl && (
+                <div className="pt-4 mt-4 border-t border-gray-50">
+                    <a
+                        href={`http://localhost:5001${candidate.resumeUrl}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 text-worko-blue hover:text-white font-semibold text-sm p-3 rounded-xl bg-blue-50 hover:bg-worko-blue transition-all duration-300 group/btn"
+                    >
+                        <FileText size={18} />
+                        <span>View Resume</span>
+                        <ExternalLink size={14} className="opacity-50 group-hover/btn:opacity-100" />
+                    </a>
+                </div>
+            )}
+
+            {/* Decorative bottom gradient line */}
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-worko-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
     );
 };
