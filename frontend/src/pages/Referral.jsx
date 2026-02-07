@@ -55,35 +55,61 @@ const Referral = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 md:py-16">
-            <div className="max-w-4xl mx-auto">
-                <div className="bg-white rounded-[2.5rem] shadow-worko border border-gray-100 overflow-hidden relative">
-                    {/* Decorative Top Bar */}
-                    <div className="h-4 bg-worko-gradient"></div>
+        <div className="h-[calc(100vh-80px)] w-full flex items-center justify-center bg-gray-50/50 p-6 overflow-hidden">
+            <div className="w-full max-w-6xl bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-full max-h-[800px]">
+                {/* Decorative Top Bar */}
+                <div className="h-2 bg-worko-gradient flex-shrink-0"></div>
 
-                    <div className="p-8 md:p-12 lg:p-16">
-                        <div className="text-center mb-12">
-                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-blue-50 text-worko-blue mb-6 transform rotate-3 hover:rotate-6 transition-transform duration-300">
+                <div className="flex flex-col md:flex-row h-full">
+                    {/* Left Side: Hero/Info - Now Bigger */}
+                    <div className="md:w-5/12 bg-slate-50 p-10 flex flex-col justify-center relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -mr-16 -mt-16"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -ml-16 -mb-16"></div>
+
+                        <div className="relative z-10">
+                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white text-worko-blue mb-8 shadow-md transform -rotate-3">
                                 <Send size={40} />
                             </div>
-                            <h1 className="text-4xl font-bold text-gray-900 mb-4">Refer a Candidate</h1>
-                            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                                Know someone great? Refer them to our network and help them land their dream job.
+                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                                Refer a <span className="text-transparent bg-clip-text bg-worko-gradient">Talent</span>
+                            </h1>
+                            <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                                Connect us with the best professionals in your network.
+                                <br className="hidden md:block" />
+                                Help them land their dream job and earn rewards.
                             </p>
-                        </div>
 
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4 text-gray-700 bg-white/80 p-4 rounded-2xl backdrop-blur-sm">
+                                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold">1</div>
+                                    <span className="font-medium">Enter candidate details</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-gray-700 bg-white/80 p-4 rounded-2xl backdrop-blur-sm">
+                                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">2</div>
+                                    <span className="font-medium">Upload their resume</span>
+                                </div>
+                                <div className="flex items-center gap-4 text-gray-700 bg-white/80 p-4 rounded-2xl backdrop-blur-sm">
+                                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">3</div>
+                                    <span className="font-medium">Track status in Dashboard</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Side: Form - Spacious */}
+                    <div className="md:w-7/12 p-10 md:p-12 flex flex-col justify-center bg-white overflow-y-auto custom-scrollbar">
                         {status.message && (
-                            <div className={`p-4 rounded-xl mb-8 flex items-center justify-center gap-3 animate-fadeIn ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
+                            <div className={`p-4 rounded-2xl mb-8 flex items-center gap-3 animate-fadeIn ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
                                 }`}>
-                                {status.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
-                                <span className="font-medium">{status.message}</span>
+                                {status.type === 'success' ? <CheckCircle size={24} /> : <AlertCircle size={24} />}
+                                <span className="font-semibold text-lg">{status.message}</span>
                             </div>
                         )}
 
                         <form onSubmit={handleSubmit} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-4">
-                                    <label className="block text-sm font-semibold text-gray-700 ml-1">Full Name</label>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Full Name</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-worko-blue transition-colors">
                                             <User size={20} />
@@ -92,7 +118,7 @@ const Referral = () => {
                                             type="text"
                                             name="name"
                                             required
-                                            className="input-worko pl-12"
+                                            className="input-worko pl-12 py-3.5 text-lg"
                                             placeholder="John Doe"
                                             value={formData.name}
                                             onChange={handleChange}
@@ -100,8 +126,8 @@ const Referral = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <label className="block text-sm font-semibold text-gray-700 ml-1">Job Title</label>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Job Title</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-worko-blue transition-colors">
                                             <Briefcase size={20} />
@@ -110,7 +136,7 @@ const Referral = () => {
                                             type="text"
                                             name="jobTitle"
                                             required
-                                            className="input-worko pl-12"
+                                            className="input-worko pl-12 py-3.5 text-lg"
                                             placeholder="Senior Developer"
                                             value={formData.jobTitle}
                                             onChange={handleChange}
@@ -118,8 +144,8 @@ const Referral = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <label className="block text-sm font-semibold text-gray-700 ml-1">Email Address</label>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Email Address</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-worko-blue transition-colors">
                                             <Mail size={20} />
@@ -128,7 +154,7 @@ const Referral = () => {
                                             type="email"
                                             name="email"
                                             required
-                                            className="input-worko pl-12"
+                                            className="input-worko pl-12 py-3.5 text-lg"
                                             placeholder="john@example.com"
                                             value={formData.email}
                                             onChange={handleChange}
@@ -136,8 +162,8 @@ const Referral = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <label className="block text-sm font-semibold text-gray-700 ml-1">Phone Number</label>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Phone Number</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-worko-blue transition-colors">
                                             <Phone size={20} />
@@ -147,7 +173,7 @@ const Referral = () => {
                                             name="phone"
                                             required
                                             pattern="[0-9]{10}"
-                                            className="input-worko pl-12"
+                                            className="input-worko pl-12 py-3.5 text-lg"
                                             placeholder="1234567890"
                                             value={formData.phone}
                                             onChange={handleChange}
@@ -156,8 +182,8 @@ const Referral = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
-                                <label className="block text-sm font-semibold text-gray-700 ml-1">Resume (PDF)</label>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-bold text-gray-700 ml-1 uppercase tracking-wider">Resume (PDF)</label>
                                 <div className="relative">
                                     <input
                                         type="file"
@@ -168,40 +194,34 @@ const Referral = () => {
                                     />
                                     <label
                                         htmlFor="resume-upload"
-                                        className={`flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 ${fileName
-                                                ? 'border-worko-blue bg-blue-50/30'
+                                        className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 gap-4 ${fileName
+                                                ? 'border-worko-blue bg-blue-50/50'
                                                 : 'border-gray-200 hover:border-worko-blue hover:bg-gray-50'
                                             }`}
                                     >
-                                        <div className={`flex flex-col items-center justify-center pt-5 pb-6 ${fileName ? 'text-worko-blue' : 'text-gray-500'}`}>
-                                            <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-3">
-                                                {fileName ? <FileText size={24} /> : <Upload size={24} />}
-                                            </div>
-                                            <p className="text-sm font-medium">
-                                                {fileName ? fileName : (
-                                                    <>
-                                                        <span className="text-worko-blue font-semibold">Click to upload</span> or drag and drop
-                                                    </>
-                                                )}
-                                            </p>
-                                            <p className="text-xs text-gray-400 mt-1">PDF (MAX. 5MB)</p>
+                                        <div className={`flex items-center justify-center w-12 h-12 rounded-full shadow-sm ${fileName ? 'bg-blue-100 text-worko-blue' : 'bg-gray-100 text-gray-500'}`}>
+                                            {fileName ? <FileText size={24} /> : <Upload size={24} />}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className={`text-lg font-semibold ${fileName ? 'text-worko-blue' : 'text-gray-700'}`}>
+                                                {fileName || 'Upload Resume'}
+                                            </span>
+                                            {!fileName && <span className="text-sm text-gray-400">PDF up to 5MB</span>}
                                         </div>
                                     </label>
                                 </div>
                             </div>
 
-                            <div className="pt-4">
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className={`w-full py-4 text-white text-lg font-bold rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 ${isSubmitting
-                                            ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-worko-gradient hover:shadow-xl'
-                                        }`}
-                                >
-                                    {isSubmitting ? 'Submitting...' : 'Submit Referral'}
-                                </button>
-                            </div>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className={`w-full py-4 text-white text-xl font-bold rounded-2xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 mt-4 ${isSubmitting
+                                        ? 'bg-gray-400 cursor-not-allowed'
+                                        : 'bg-worko-gradient hover:shadow-xl'
+                                    }`}
+                            >
+                                {isSubmitting ? 'Submitting...' : 'Submit Referral'}
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ function App() {
     <Router>
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <main className="container py-8">
+        <main>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/refer" element={<Referral />} />
