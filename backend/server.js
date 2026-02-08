@@ -1,12 +1,26 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const path = require('path');
 
 dotenv.config();
 
 const app = express();
+
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "data:", "https://candidate-referral-management-system-fnxm.onrender.com"],
+            styleSrc: ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", "data:"],
+            connectSrc: ["'self'"],
+        },
+    },
+}));
 
 const seedAdmin = require('./seeder');
 
