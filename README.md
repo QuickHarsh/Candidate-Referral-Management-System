@@ -68,14 +68,7 @@ Start the backend server:
 npm run dev
 ```
 
-### 3. Database Seeding
-To create the **Admin Account** (`admin@worko.com`), run the following command:
-```bash
-npm run seed
-```
-*(This checks if the admin exists and creates it if not. It also resets the password to `Workoadmin123`.)*
-
-### 4. Frontend Setup
+### 3. Frontend Setup
 Open a new terminal, navigate to the frontend folder, and install dependencies:
 ```bash
 cd frontend
