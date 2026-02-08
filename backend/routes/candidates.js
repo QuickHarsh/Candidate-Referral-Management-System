@@ -28,6 +28,36 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
+// @desc    Get candidate statistics
+// @route   GET /api/candidates/stats
+// @access  Private (Admin)
+router.get('/stats', protect, authorize('admin'), async (req, res) => {
+    try {
+        const stats = await Candidate.aggregate([
+            {
+                $group: {
+                    _id: '$status',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        const total = await Candidate.countDocuments();
+
+        const formattedStats = {
+            total,
+            pending: stats.find(s => s._id === 'Pending')?.count || 0,
+            reviewed: stats.find(s => s._id === 'Reviewed')?.count || 0,
+            hired: stats.find(s => s._id === 'Hired')?.count || 0,
+        };
+
+        res.status(200).json({ success: true, data: formattedStats });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+});
+
 // @desc    Get all candidates
 // @route   GET /api/candidates
 // @access  Private (Admin only)

@@ -1,27 +1,105 @@
-# Candidate Referral Management System
+# Candidate Referral Management System (Worko.ai)
 
-A full-stack application for managing candidate referrals, designed with a modern aesthetic inspired by [Worko.ai](https://worko.ai/).
+A full-stack web application designed to streamline the candidate referral process. Built with a modern, responsive UI inspired by Worko.ai's premium aesthetic, it features secure role-based access control, real-time status tracking, and a comprehensive admin dashboard.
 
-## Features
+![Dashboard Preview](frontend/public/dashboard.png)
 
-### Frontend (React)
-- **Dashboard:** View all referred candidates with their status (Pending, Reviewed, Hired).
-- **Referral Form:** Submit new candidate referrals with resume upload (PDF only).
-- **Search & Filter:** Filter candidates by job title or status.
-- **Status Management:** Update candidate status effortlessly.
-- **Responsive Design:** A clean, modern UI with a Royal Blue theme.
+## 🚀 Features
 
-### Backend (Node.js + Express)
-- **REST API:** Endpoints for creating, retrieving, and updating candidates.
-- **MongoDB Integration:** Persistent storage for candidate data.
-- **Validation:** Ensures data integrity for emails, phone numbers, and file types.
-- **File Handling:** Supports resume uploads.
+### Public Portal
+- **Landing Page:** A visually engaging introduction to the referral program.
+- **Referral Submission:** Easy-to-use form for submitting candidate details and resumes (PDF support).
+- **Secure Registration:** Users can sign up for an account to track their referrals.
 
-## Tech Stack
-- **Frontend:** React, Vite, CSS (Custom Theme)
-- **Backend:** Node.js, Express, MongoDB, Mongoose
-- **Tools:** Git, Postman (for API testing)
+### Admin Dashboard (Protected)
+- **Single Admin Policy:** A dedicated Super Admin account (`admin@worko.com`) with full system access.
+- **Metrics Hub:** Real-time statistics on Total Referrals, Pending Reviews, and Hires.
+- **Candidate Management:** View, Search, Filter, Update Status, and Delete candidates.
+- **RBAC:** Strict access control ensuring only authorized personnel can modifying data.
 
-## Getting Started
+## 🛠️ Tech Stack
 
-See the [Documentation](docs/README.md) for detailed setup and running instructions.
+### Frontend
+- **Framework:** React 18 (Vite)
+- **Styling:** Tailwind CSS v3 (Custom Configuration)
+- **Icons:** Lucide React
+- **Routing:** React Router DOM v6
+- **State Management:** React Context API (Auth)
+
+### Backend
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB (Mongoose ODM)
+- **Authentication:** JSON Web Tokens (JWT) & bcryptjs
+- **File Uploads:** Multer
+
+## 📦 Installation & Setup
+
+### Prerequisites
+- Node.js (v14+)
+- MongoDB (Local or Atlas URI)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/candidate-referral-system.git
+cd candidate-referral-system
+```
+
+### 2. Backend Setup
+Navigate to the backend folder and install dependencies:
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file in the `backend` directory:
+```env
+PORT=5001
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRE=30d
+JWT_COOKIE_EXPIRE=30
+```
+
+Start the backend server (Admin account will be auto-seeded):
+```bash
+npm run dev
+```
+
+### 3. Frontend Setup
+Navigate to the frontend folder and install dependencies:
+```bash
+cd ../frontend
+npm install
+```
+
+Start the development server:
+```bash
+npm run dev
+```
+
+## 🔐 Credentials
+
+### Super Admin
+- **Email:** `admin@worko.com`
+- **Password:** `Workoadmin123`
+*(Note: This account is automatically created when the backend server starts if it doesn't exist.)*
+
+### Regular User
+- **Email:** `user@example.com` (Register via the Signup page)
+- **Role:** Restricted to "User" by default (Cannot access Dashboard).
+
+## 📡 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login user/admin
+- `GET /api/auth/me` - Get current user profile
+
+### Candidates
+- `GET /api/candidates` - Get all candidates (Admin/User)
+- `POST /api/candidates` - Submit a new referral (Public)
+- `GET /api/candidates/stats` - Get referral statistics (Admin)
+- `PUT /api/candidates/:id/status` - Update candidate status (Admin)
+- `DELETE /api/candidates/:id` - Delete a candidate (Admin)
+

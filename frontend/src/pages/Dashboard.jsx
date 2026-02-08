@@ -1,28 +1,35 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CandidateCard from '../components/CandidateCard';
+import StatsHub from '../components/StatsHub';
 import { Search, Filter, Briefcase } from 'lucide-react';
 
 const Dashboard = () => {
     const [candidates, setCandidates] = useState([]);
+    const [stats, setStats] = useState({ total: 0, pending: 0, reviewed: 0, hired: 0 });
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
 
     useEffect(() => {
-        fetchCandidates();
+        fetchData();
     }, []);
 
-    const fetchCandidates = async () => {
+    const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5001/api/candidates', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setCandidates(res.data.data || []);
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+
+            const [candidatesRes, statsRes] = await Promise.all([
+                axios.get('http://localhost:5001/api/candidates', config),
+                axios.get('http://localhost:5001/api/candidates/stats', config)
+            ]);
+
+            setCandidates(candidatesRes.data.data || []);
+            setStats(statsRes.data.data);
         } catch (err) {
-            console.error('Error fetching candidates:', err);
+            console.error('Error fetching data:', err);
             // If 401, AuthContext might handle it or we can redirect
             if (err.response && err.response.status === 401) {
                 // optional: redirect to login
@@ -116,6 +123,9 @@ const Dashboard = () => {
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
                 <div className="absolute bottom-0 right-0 -mb-20 -mr-20 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
             </div>
+
+            {/* Stats Overview */}
+            <StatsHub stats={stats} />
 
             {/* Candidates Grid */}
             {filteredCandidates.length > 0 ? (
