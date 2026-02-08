@@ -5,14 +5,8 @@ const path = require('path');
 const Candidate = require('../models/Candidate');
 const { protect, authorize } = require('../middleware/auth');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    },
-});
+// Use memory storage to store file in buffer
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'application/pdf') {
@@ -24,7 +18,8 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
     storage: storage,
-    fileFilter: fileFilter
+    fileFilter: fileFilter,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
 router.get('/stats', protect, authorize('admin'), async (req, res) => {
@@ -56,9 +51,26 @@ router.get('/stats', protect, authorize('admin'), async (req, res) => {
 
 router.get('/', protect, authorize('admin', 'user'), async (req, res) => {
     try {
-        const candidates = await Candidate.find().sort({ createdAt: -1 });
+        // Exclude resume data from list view to keep it light
+        const candidates = await Candidate.find().select('-resume.data').sort({ createdAt: -1 });
         res.status(200).json({ success: true, count: candidates.length, data: candidates });
     } catch (err) {
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+});
+
+router.get('/:id/resume', async (req, res) => {
+    try {
+        const candidate = await Candidate.findById(req.params.id);
+
+        if (!candidate || !candidate.resume || !candidate.resume.data) {
+            return res.status(404).json({ success: false, error: 'Resume not found' });
+        }
+
+        res.set('Content-Type', candidate.resume.contentType);
+        res.send(candidate.resume.data);
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ success: false, error: 'Server Error' });
     }
 });
@@ -66,26 +78,40 @@ router.get('/', protect, authorize('admin', 'user'), async (req, res) => {
 router.post('/', upload.single('resume'), async (req, res) => {
     try {
         const { name, email, phone, jobTitle } = req.body;
-        let resumeUrl = '';
 
-        if (req.file) {
-            resumeUrl = `/uploads/${req.file.filename}`;
-        }
-
-        const candidate = await Candidate.create({
+        const candidateData = {
             name,
             email,
             phone,
             jobTitle,
-            resumeUrl,
-        });
+        };
 
-        res.status(201).json({ success: true, data: candidate });
+        if (req.file) {
+            candidateData.resume = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
+        }
+
+        const candidate = await Candidate.create(candidateData);
+
+        // Update resumeUrl to point to the new endpoint
+        if (req.file) {
+            candidate.resumeUrl = `/api/candidates/${candidate._id}/resume`;
+            await candidate.save();
+        }
+
+        // Return candidate without heavy resume data
+        const responseCandidate = candidate.toObject();
+        delete responseCandidate.resume;
+
+        res.status(201).json({ success: true, data: responseCandidate });
     } catch (err) {
         if (err.name === 'ValidationError') {
             const messages = Object.values(err.errors).map((val) => val.message);
             return res.status(400).json({ success: false, error: messages });
         }
+        console.error(err);
         res.status(500).json({ success: false, error: 'Server Error' });
     }
 });
@@ -103,7 +129,7 @@ router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
             req.params.id,
             { status },
             { new: true, runValidators: true }
-        );
+        ).select('-resume.data');
 
         if (!candidate) {
             return res.status(404).json({ success: false, error: 'Candidate not found' });
