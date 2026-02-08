@@ -14,10 +14,19 @@ const Dashboard = () => {
 
     const fetchCandidates = async () => {
         try {
-            const res = await axios.get('http://localhost:5001/api/candidates');
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:5001/api/candidates', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             setCandidates(res.data.data || []);
         } catch (err) {
             console.error('Error fetching candidates:', err);
+            // If 401, AuthContext might handle it or we can redirect
+            if (err.response && err.response.status === 401) {
+                // optional: redirect to login
+            }
             setCandidates([]);
         }
     };
@@ -31,7 +40,12 @@ const Dashboard = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this candidate?')) return;
         try {
-            await axios.delete(`http://localhost:5001/api/candidates/${id}`);
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:5001/api/candidates/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             setCandidates(candidates.filter(c => c._id !== id));
         } catch (err) {
             console.error('Error deleting candidate:', err);

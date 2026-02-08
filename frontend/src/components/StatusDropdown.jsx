@@ -30,17 +30,19 @@ const StatusDropdown = ({ currentStatus, onUpdate, candidateId }) => {
         setStatus(newStatus);
         setIsOpen(false);
         if (onUpdate) {
-
-            // Call API directly here as well to ensure it persists if parent doesn't handle it fully
             try {
+                const token = localStorage.getItem('token');
                 await axios.put(`http://localhost:5001/api/candidates/${candidateId}/status`, {
                     status: newStatus
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 onUpdate(candidateId, newStatus);
             } catch (err) {
                 console.error("Failed to update status", err);
-                // Revert on failure
-                setStatus(currentStatus);
+                setStatus(currentStatus); // Revert on failure
             }
         }
     };

@@ -1,0 +1,61 @@
+import { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        checkUserLoggedIn();
+    }, []);
+
+    // Check if user is logged in
+    const checkUserLoggedIn = async () => {
+        try {
+            const { data } = await axios.get('http://localhost:5001/api/auth/me', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setUser(data.data);
+        } catch (error) {
+            localStorage.removeItem('token');
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Register User
+    const register = async (userData) => {
+        const { data } = await axios.post('http://localhost:5001/api/auth/register', userData);
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        return data;
+    };
+
+    // Login User
+    const login = async (userData) => {
+        const { data } = await axios.post('http://localhost:5001/api/auth/login', userData);
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        return data;
+    };
+
+    // Logout User
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser(null);
+        window.location.href = '/login';
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export default AuthContext;

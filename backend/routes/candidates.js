@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const Candidate = require('../models/Candidate');
+const { protect, authorize } = require('../middleware/auth');
 
 // Set up Multer for file uploads
 const storage = multer.diskStorage({
@@ -29,8 +30,8 @@ const upload = multer({
 
 // @desc    Get all candidates
 // @route   GET /api/candidates
-// @access  Public
-router.get('/', async (req, res) => {
+// @access  Private (Admin only)
+router.get('/', protect, authorize('admin', 'user'), async (req, res) => {
     try {
         const candidates = await Candidate.find().sort({ createdAt: -1 });
         res.status(200).json({ success: true, count: candidates.length, data: candidates });
@@ -72,8 +73,8 @@ router.post('/', upload.single('resume'), async (req, res) => {
 
 // @desc    Update candidate status
 // @route   PUT /api/candidates/:id/status
-// @access  Public
-router.put('/:id/status', async (req, res) => {
+// @access  Private (Admin)
+router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
     try {
         const { status } = req.body;
 
@@ -101,8 +102,8 @@ router.put('/:id/status', async (req, res) => {
 
 // @desc    Delete a candidate
 // @route   DELETE /api/candidates/:id
-// @access  Public
-router.delete('/:id', async (req, res) => {
+// @access  Private (Admin)
+router.delete('/:id', protect, authorize('admin'), async (req, res) => {
     try {
         const candidate = await Candidate.findByIdAndDelete(req.params.id);
 
