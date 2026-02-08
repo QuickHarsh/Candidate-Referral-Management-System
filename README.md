@@ -2,6 +2,8 @@
 
 A full-stack web application designed to streamline the candidate referral process. Built with a modern, responsive UI inspired by Worko.ai's premium aesthetic, it features secure role-based access control, real-time status tracking, and a comprehensive admin dashboard.
 
+### 🚀 [Live Demo](https://worko-ai-frontend.vercel.app/)
+
 ![Dashboard Preview](frontend/public/dashboard.png)
 
 ## 🚀 Features
