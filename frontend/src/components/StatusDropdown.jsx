@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Check, Clock, UserCheck, Briefcase } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const StatusDropdown = ({ currentStatus, onUpdate, candidateId }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +33,7 @@ const StatusDropdown = ({ currentStatus, onUpdate, candidateId }) => {
         if (onUpdate) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates/${candidateId}/status`, {
+                await axios.put(`${API_URL}/api/candidates/${candidateId}/status`, {
                     status: newStatus
                 }, {
                     headers: {

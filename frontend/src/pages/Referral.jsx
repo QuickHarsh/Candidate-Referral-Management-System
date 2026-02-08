@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Upload, CheckCircle, AlertCircle, User, Briefcase, Mail, Phone, FileText, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const Referral = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Referral = () => {
         Object.keys(formData).forEach(key => data.append(key, formData[key]));
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates`, data, {
+            await axios.post(`${API_URL}/api/candidates`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setStatus({ type: 'success', message: 'Candidate referred successfully!' });

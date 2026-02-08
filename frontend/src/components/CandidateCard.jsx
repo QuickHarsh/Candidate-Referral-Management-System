@@ -1,5 +1,6 @@
 import { Mail, Phone, FileText, Briefcase, ExternalLink, Trash2 } from 'lucide-react';
 import StatusDropdown from './StatusDropdown';
+import { API_URL } from '../config';
 
 const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
 
@@ -50,7 +51,7 @@ const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
             <div className={`mt-4 pt-4 border-t border-gray-50 flex items-center ${candidate.resumeUrl ? 'justify-between' : 'justify-end'}`}>
                 {candidate.resumeUrl && (
                     <a
-                        href={`${(import.meta.env.VITE_API_URL || 'http://localhost:5001')}${candidate.resumeUrl}`}
+                        href={`${API_URL}${candidate.resumeUrl}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 text-worko-blue hover:text-white font-semibold text-sm px-4 py-2 rounded-lg bg-blue-50 hover:bg-worko-blue transition-all duration-300 group/btn"
