@@ -2,11 +2,11 @@
 
 A full-stack web application designed to streamline the candidate referral process. Built with a modern, responsive UI inspired by Worko.ai's premium aesthetic, it features secure role-based access control, real-time status tracking, and a comprehensive admin dashboard.
 
-### 🚀 [Live Demo](https://worko-ai-frontend.vercel.app/)
+### [Live Demo](https://worko-ai-frontend.vercel.app/)
 
 ![Dashboard Preview](frontend/public/dashboard.png)
 
-## 🚀 Features
+## Features
 
 ### Public Portal
 - **Landing Page:** A visually engaging introduction to the referral program.
@@ -35,7 +35,7 @@ A full-stack web application designed to streamline the candidate referral proce
 - **Authentication:** JSON Web Tokens (JWT) & bcryptjs
 - **File Uploads:** Multer
 
-## 📦 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - Node.js (v14+)
@@ -66,8 +66,13 @@ JWT_COOKIE_EXPIRE=30
 Start the backend server (Admin account will be auto-seeded):
 ```bash
 npm run dev
+```
+
+### 3. Frontend Setup
+Open new terminal and navigate to the frontend folder and install dependencies:
 ```bash
-npm run dev
+cd frontend
+npm install
 ```
 
 ### 4. Database Seeding (Important)
@@ -77,8 +82,11 @@ npm run seed
 ```
 *(This is safe to run multiple times; it will create the admin if missing or reset the password if it exists.)*
 
-### 3. Frontend Setup
-Navigate to the frontend folder and install dependencies:
+## Assumptions & Limitations
+- **Resume Storage:**
+    - In local development, resumes are stored in the `backend/uploads` directory.
+    - **On Render (Free Tier):** Resumes are stored on an *ephemeral* filesystem. This means uploaded files will disappear if the server restarts or redeploys. For a production app, we would use AWS S3 or Google Cloud Storage (as noted in the optional requirements), but for this assignment, local storage was implemented to demonstrate file handling logic.
+- **Email/Phone Validation:** Basic regex is used for validation. In a real-world scenario, we might use stricter libraries or SMS/Email verification.
 ```bash
 cd ../frontend
 npm install
@@ -89,7 +97,7 @@ Start the development server:
 npm run dev
 ```
 
-## 🔐 Credentials
+## Credentials
 
 ### Super Admin
 - **Email:** `admin@worko.com`
@@ -100,7 +108,7 @@ npm run dev
 - **Email:** `user@example.com` (Register via the Signup page)
 - **Role:** Restricted to "User" by default (Cannot access Dashboard).
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - Register a new user
