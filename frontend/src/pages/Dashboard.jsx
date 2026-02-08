@@ -28,6 +28,16 @@ const Dashboard = () => {
         ));
     };
 
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this candidate?')) return;
+        try {
+            await axios.delete(`http://localhost:5001/api/candidates/${id}`);
+            setCandidates(candidates.filter(c => c._id !== id));
+        } catch (err) {
+            console.error('Error deleting candidate:', err);
+        }
+    };
+
     const filteredCandidates = candidates.filter(candidate => {
         const matchesSearch = candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             candidate.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
@@ -101,6 +111,7 @@ const Dashboard = () => {
                             key={candidate._id}
                             candidate={candidate}
                             onStatusUpdate={handleStatusUpdate}
+                            onDelete={handleDelete}
                         />
                     ))}
                 </div>

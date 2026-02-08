@@ -1,7 +1,7 @@
-import { Mail, Phone, FileText, Briefcase, ExternalLink } from 'lucide-react';
+import { Mail, Phone, FileText, Briefcase, ExternalLink, Trash2 } from 'lucide-react';
 import StatusDropdown from './StatusDropdown';
 
-const CandidateCard = ({ candidate, onStatusUpdate }) => {
+const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
 
     const handleStatusChange = async (newStatus) => {
         try {
@@ -58,20 +58,28 @@ const CandidateCard = ({ candidate, onStatusUpdate }) => {
             </div>
 
             {/* Footer */}
-            {candidate.resumeUrl && (
-                <div className="pt-4 mt-4 border-t border-gray-50">
+            <div className={`mt-4 pt-4 border-t border-gray-50 flex items-center ${candidate.resumeUrl ? 'justify-between' : 'justify-end'}`}>
+                {candidate.resumeUrl && (
                     <a
                         href={`http://localhost:5001${candidate.resumeUrl}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 text-worko-blue hover:text-white font-semibold text-sm p-3 rounded-xl bg-blue-50 hover:bg-worko-blue transition-all duration-300 group/btn"
+                        className="flex items-center gap-2 text-worko-blue hover:text-white font-semibold text-sm px-4 py-2 rounded-lg bg-blue-50 hover:bg-worko-blue transition-all duration-300 group/btn"
                     >
-                        <FileText size={18} />
-                        <span>View Resume</span>
+                        <FileText size={16} />
+                        <span>Resume</span>
                         <ExternalLink size={14} className="opacity-50 group-hover/btn:opacity-100" />
                     </a>
-                </div>
-            )}
+                )}
+
+                <button
+                    onClick={() => onDelete(candidate._id)}
+                    className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                    title="Delete Candidate"
+                >
+                    <Trash2 size={18} />
+                </button>
+            </div>
 
             {/* Decorative bottom gradient line */}
             <div className="absolute bottom-0 left-0 w-full h-1 bg-worko-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>

@@ -99,4 +99,21 @@ router.put('/:id/status', async (req, res) => {
     }
 });
 
+// @desc    Delete a candidate
+// @route   DELETE /api/candidates/:id
+// @access  Public
+router.delete('/:id', async (req, res) => {
+    try {
+        const candidate = await Candidate.findByIdAndDelete(req.params.id);
+
+        if (!candidate) {
+            return res.status(404).json({ success: false, error: 'Candidate not found' });
+        }
+
+        res.status(200).json({ success: true, data: {} });
+    } catch (err) {
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+});
+
 module.exports = router;
