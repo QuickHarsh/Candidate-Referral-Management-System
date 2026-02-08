@@ -22,15 +22,14 @@ const Dashboard = () => {
             };
 
             const [candidatesRes, statsRes] = await Promise.all([
-                axios.get('http://localhost:5001/api/candidates', config),
-                axios.get('http://localhost:5001/api/candidates/stats', config)
+                axios.get(`${import.meta.env.VITE_API_URL}/api/candidates`, config),
+                axios.get(`${import.meta.env.VITE_API_URL}/api/candidates/stats`, config)
             ]);
 
             setCandidates(candidatesRes.data.data || []);
             setStats(statsRes.data.data);
         } catch (err) {
             console.error('Error fetching data:', err);
-            // If 401, AuthContext might handle it or we can redirect
             if (err.response && err.response.status === 401) {
                 // optional: redirect to login
             }
@@ -48,7 +47,7 @@ const Dashboard = () => {
         if (!window.confirm('Are you sure you want to delete this candidate?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5001/api/candidates/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/candidates/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -85,7 +84,6 @@ const Dashboard = () => {
                         Manage your candidate referrals in real-time. Help us hire the best talent and earn rewards for successful hires.
                     </p>
 
-                    {/* Search & Filter Bar */}
                     <div className="flex flex-col md:flex-row gap-4 bg-white p-2 rounded-2xl shadow-worko border border-gray-100">
                         <div className="relative flex-1">
                             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -119,15 +117,12 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
                 <div className="absolute bottom-0 right-0 -mb-20 -mr-20 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
             </div>
 
-            {/* Stats Overview */}
             <StatsHub stats={stats} />
 
-            {/* Candidates Grid */}
             {filteredCandidates.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredCandidates.map((candidate) => (

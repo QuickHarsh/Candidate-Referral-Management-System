@@ -32,7 +32,7 @@ const candidateSchema = new mongoose.Schema({
     default: 'Pending',
   },
   resumeUrl: {
-    type: String, // URL to the uploaded file
+    type: String,
     required: false,
   },
   createdAt: {

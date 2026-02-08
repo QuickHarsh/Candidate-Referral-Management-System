@@ -5,16 +5,8 @@ const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
 
     const handleStatusChange = async (newStatus) => {
         try {
-            // Update logic is handled by parent, but we might want optimisic updates or API call here
-            // Assuming parent handles API for now as per original code structure
             await onStatusUpdate(candidate._id, newStatus);
 
-            // If we need to make the API call here directly:
-            /*
-           const res = await axios.put(`http://localhost:5001/api/candidates/${candidate._id}/status`, {
-               status: newStatus
-           });
-           */
         } catch (err) {
             console.error("Failed to update status", err);
         }
@@ -22,7 +14,6 @@ const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
 
     return (
         <div className="card-worko group relative flex flex-col h-full">
-            {/* Header */}
             <div className="flex justify-between items-start mb-6">
                 <div className="flex items-start gap-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl flex items-center justify-center shadow-inner text-worko-blue font-bold text-2xl">
@@ -41,7 +32,6 @@ const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
                 <StatusDropdown currentStatus={candidate.status} onUpdate={onStatusUpdate} candidateId={candidate._id} />
             </div>
 
-            {/* Content */}
             <div className="space-y-3 flex-grow">
                 <a href={`mailto:${candidate.email}`} className="flex items-center gap-3 text-gray-600 hover:text-worko-blue transition-colors text-sm p-2.5 rounded-xl hover:bg-blue-50/50 border border-transparent hover:border-blue-100 group/item">
                     <div className="w-8 h-8 rounded-lg bg-gray-50 group-hover/item:bg-white flex items-center justify-center text-gray-400 group-hover/item:text-worko-blue transition-colors">
@@ -57,11 +47,10 @@ const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
                 </a>
             </div>
 
-            {/* Footer */}
             <div className={`mt-4 pt-4 border-t border-gray-50 flex items-center ${candidate.resumeUrl ? 'justify-between' : 'justify-end'}`}>
                 {candidate.resumeUrl && (
                     <a
-                        href={`http://localhost:5001${candidate.resumeUrl}`}
+                        href={`${import.meta.env.VITE_API_URL}${candidate.resumeUrl}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 text-worko-blue hover:text-white font-semibold text-sm px-4 py-2 rounded-lg bg-blue-50 hover:bg-worko-blue transition-all duration-300 group/btn"
@@ -81,7 +70,6 @@ const CandidateCard = ({ candidate, onStatusUpdate, onDelete }) => {
                 </button>
             </div>
 
-            {/* Decorative bottom gradient line */}
             <div className="absolute bottom-0 left-0 w-full h-1 bg-worko-gradient transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
         </div>
     );

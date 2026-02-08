@@ -6,7 +6,6 @@ const StatCard = ({ title, value, icon: Icon, color, subtext }) => (
             <div className={`p-3 rounded-xl ${color}`}>
                 <Icon size={24} className="text-white" />
             </div>
-            {/* Optional: Add percentage change or other metric here */}
         </div>
         <div>
             <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>

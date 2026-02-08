@@ -37,15 +37,13 @@ const Referral = () => {
         Object.keys(formData).forEach(key => data.append(key, formData[key]));
 
         try {
-            await axios.post('http://localhost:5001/api/candidates', data, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/candidates`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setStatus({ type: 'success', message: 'Candidate referred successfully!' });
-            // Reset form
             setFormData({ name: '', email: '', phone: '', jobTitle: '', resume: null });
             setFileName('');
 
-            // Redirect after delay
             setTimeout(() => navigate('/'), 2000);
         } catch (err) {
             setStatus({ type: 'error', message: err.response?.data?.message || 'Something went wrong' });
@@ -57,11 +55,11 @@ const Referral = () => {
     return (
         <div className="h-[calc(100vh-80px)] w-full flex items-center justify-center bg-gray-50/50 p-6 overflow-hidden">
             <div className="w-full max-w-6xl bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-full max-h-[800px]">
-                {/* Decorative Top Bar */}
+
                 <div className="h-2 bg-worko-gradient flex-shrink-0"></div>
 
                 <div className="flex flex-col md:flex-row h-full">
-                    {/* Left Side: Hero/Info - Now Bigger */}
+
                     <div className="md:w-5/12 bg-slate-50 p-10 flex flex-col justify-center relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -mr-16 -mt-16"></div>
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -ml-16 -mb-16"></div>
@@ -96,7 +94,6 @@ const Referral = () => {
                         </div>
                     </div>
 
-                    {/* Right Side: Form - Spacious */}
                     <div className="md:w-7/12 p-10 md:p-12 flex flex-col justify-center bg-white overflow-y-auto custom-scrollbar">
                         {status.message && (
                             <div className={`p-4 rounded-2xl mb-8 flex items-center gap-3 animate-fadeIn ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
@@ -195,8 +192,8 @@ const Referral = () => {
                                     <label
                                         htmlFor="resume-upload"
                                         className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300 gap-4 ${fileName
-                                                ? 'border-worko-blue bg-blue-50/50'
-                                                : 'border-gray-200 hover:border-worko-blue hover:bg-gray-50'
+                                            ? 'border-worko-blue bg-blue-50/50'
+                                            : 'border-gray-200 hover:border-worko-blue hover:bg-gray-50'
                                             }`}
                                     >
                                         <div className={`flex items-center justify-center w-12 h-12 rounded-full shadow-sm ${fileName ? 'bg-blue-100 text-worko-blue' : 'bg-gray-100 text-gray-500'}`}>
@@ -216,8 +213,8 @@ const Referral = () => {
                                 type="submit"
                                 disabled={isSubmitting}
                                 className={`w-full py-4 text-white text-xl font-bold rounded-2xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 mt-4 ${isSubmitting
-                                        ? 'bg-gray-400 cursor-not-allowed'
-                                        : 'bg-worko-gradient hover:shadow-xl'
+                                    ? 'bg-gray-400 cursor-not-allowed'
+                                    : 'bg-worko-gradient hover:shadow-xl'
                                     }`}
                             >
                                 {isSubmitting ? 'Submitting...' : 'Submit Referral'}

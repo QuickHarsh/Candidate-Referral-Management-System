@@ -9,7 +9,7 @@ const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
 
     const navLinks = [
-        { path: '/', label: 'Home', icon: Briefcase }, // Changed Dashboard to Home since Dashboard is now protected/separate
+        { path: '/', label: 'Home', icon: Briefcase },
         { path: '/refer', label: 'Refer Candidate', icon: UserPlus },
     ];
 
@@ -27,7 +27,6 @@ const Navbar = () => {
         <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between h-20">
-                    {/* Logo Section */}
                     <Link to="/" className="flex items-center gap-2 group">
                         <div className="w-10 h-10 bg-worko-gradient rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform duration-300">
                             <span className="text-white font-bold text-xl">W</span>
@@ -35,7 +34,6 @@ const Navbar = () => {
                         <span className="text-2xl font-bold text-gray-900 tracking-tight">Worko.ai</span>
                     </Link>
 
-                    {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">
                         {navLinks.map((link) => (
                             <Link
@@ -49,7 +47,6 @@ const Navbar = () => {
                         ))}
                     </div>
 
-                    {/* CTA Button / Auth */}
                     <div className="hidden md:flex items-center gap-4">
                         {user ? (
                             <div className="flex items-center gap-4">
@@ -77,7 +74,6 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    {/* Mobile Menu Button */}
                     <button
                         className="md:hidden p-2 text-gray-600 hover:bg-gray-50 rounded-lg"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -86,7 +82,6 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                {/* Mobile Menu */}
                 {isMenuOpen && (
                     <div className="md:hidden py-4 border-t border-gray-100 animate-fadeIn">
                         <div className="flex flex-col gap-4">

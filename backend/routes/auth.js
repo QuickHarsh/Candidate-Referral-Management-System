@@ -3,9 +3,6 @@ const router = express.Router();
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
-// @desc    Register user
-// @route   POST /api/auth/register
-// @access  Public
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -24,26 +21,20 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Validate email & password
         if (!email || !password) {
             return res.status(400).json({ success: false, error: 'Please provide an email and password' });
         }
 
-        // Check for user
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
             return res.status(401).json({ success: false, error: 'Invalid credentials' });
         }
 
-        // Check if password matches
         const isMatch = await user.matchPassword(password);
 
         if (!isMatch) {
@@ -56,9 +47,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// @desc    Get current logged in user
-// @route   GET /api/auth/me
-// @access  Private
 router.get('/me', protect, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -68,9 +56,7 @@ router.get('/me', protect, async (req, res) => {
     }
 });
 
-// Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
-    // Create token
     const token = user.getSignedJwtToken();
 
     const options = {
@@ -86,7 +72,6 @@ const sendTokenResponse = (user, statusCode, res) => {
 
     res
         .status(statusCode)
-        // .cookie('token', token, options) // Optional: cookies
         .json({
             success: true,
             token,

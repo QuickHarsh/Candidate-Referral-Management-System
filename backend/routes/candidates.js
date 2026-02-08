@@ -5,7 +5,6 @@ const path = require('path');
 const Candidate = require('../models/Candidate');
 const { protect, authorize } = require('../middleware/auth');
 
-// Set up Multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -28,9 +27,6 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-// @desc    Get candidate statistics
-// @route   GET /api/candidates/stats
-// @access  Private (Admin)
 router.get('/stats', protect, authorize('admin'), async (req, res) => {
     try {
         const stats = await Candidate.aggregate([
@@ -58,9 +54,6 @@ router.get('/stats', protect, authorize('admin'), async (req, res) => {
     }
 });
 
-// @desc    Get all candidates
-// @route   GET /api/candidates
-// @access  Private (Admin only)
 router.get('/', protect, authorize('admin', 'user'), async (req, res) => {
     try {
         const candidates = await Candidate.find().sort({ createdAt: -1 });
@@ -70,16 +63,12 @@ router.get('/', protect, authorize('admin', 'user'), async (req, res) => {
     }
 });
 
-// @desc    Create a new candidate
-// @route   POST /api/candidates
-// @access  Public
 router.post('/', upload.single('resume'), async (req, res) => {
     try {
         const { name, email, phone, jobTitle } = req.body;
         let resumeUrl = '';
 
         if (req.file) {
-            // In a real app, you'd upload to S3 here. For now, we serve locally.
             resumeUrl = `/uploads/${req.file.filename}`;
         }
 
@@ -101,14 +90,10 @@ router.post('/', upload.single('resume'), async (req, res) => {
     }
 });
 
-// @desc    Update candidate status
-// @route   PUT /api/candidates/:id/status
-// @access  Private (Admin)
 router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
     try {
         const { status } = req.body;
 
-        // Validate status
         const validStatuses = ['Pending', 'Reviewed', 'Hired'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ success: false, error: 'Invalid status' });
@@ -130,9 +115,6 @@ router.put('/:id/status', protect, authorize('admin'), async (req, res) => {
     }
 });
 
-// @desc    Delete a candidate
-// @route   DELETE /api/candidates/:id
-// @access  Private (Admin)
 router.delete('/:id', protect, authorize('admin'), async (req, res) => {
     try {
         const candidate = await Candidate.findByIdAndDelete(req.params.id);

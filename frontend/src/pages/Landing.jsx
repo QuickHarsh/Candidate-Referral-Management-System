@@ -4,7 +4,6 @@ import { UserPlus, Briefcase, ArrowRight, CheckCircle, Shield } from 'lucide-rea
 const Landing = () => {
     return (
         <div className="flex flex-col min-h-[calc(100vh-80px)]">
-            {/* Hero Section */}
             <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-20 bg-gradient-to-b from-blue-50/50 to-white">
                 <div className="max-w-4xl mx-auto space-y-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-worko-blue font-semibold text-sm animate-fadeIn">
@@ -44,7 +43,6 @@ const Landing = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
             <section className="py-20 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
