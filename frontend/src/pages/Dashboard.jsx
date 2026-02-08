@@ -22,8 +22,8 @@ const Dashboard = () => {
             };
 
             const [candidatesRes, statsRes] = await Promise.all([
-                axios.get(`${import.meta.env.VITE_API_URL}/api/candidates`, config),
-                axios.get(`${import.meta.env.VITE_API_URL}/api/candidates/stats`, config)
+                axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates`, config),
+                axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates/stats`, config)
             ]);
 
             setCandidates(candidatesRes.data.data || []);
@@ -47,7 +47,7 @@ const Dashboard = () => {
         if (!window.confirm('Are you sure you want to delete this candidate?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/candidates/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

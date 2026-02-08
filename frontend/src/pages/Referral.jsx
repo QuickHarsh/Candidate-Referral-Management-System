@@ -37,7 +37,7 @@ const Referral = () => {
         Object.keys(formData).forEach(key => data.append(key, formData[key]));
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/candidates`, data, {
+            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setStatus({ type: 'success', message: 'Candidate referred successfully!' });

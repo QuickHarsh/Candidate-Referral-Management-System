@@ -32,7 +32,7 @@ const StatusDropdown = ({ currentStatus, onUpdate, candidateId }) => {
         if (onUpdate) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.put(`${import.meta.env.VITE_API_URL}/api/candidates/${candidateId}/status`, {
+                await axios.put(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/candidates/${candidateId}/status`, {
                     status: newStatus
                 }, {
                     headers: {
