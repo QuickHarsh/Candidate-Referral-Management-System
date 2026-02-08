@@ -64,7 +64,16 @@ JWT_COOKIE_EXPIRE=30
 Start the backend server (Admin account will be auto-seeded):
 ```bash
 npm run dev
+```bash
+npm run dev
 ```
+
+### 4. Database Seeding (Important)
+To create the **Admin Account** (`admin@worko.com`), run the following command:
+```bash
+npm run seed
+```
+*(This is safe to run multiple times; it will create the admin if missing or reset the password if it exists.)*
 
 ### 3. Frontend Setup
 Navigate to the frontend folder and install dependencies:
