@@ -43,12 +43,12 @@ A full-stack web application designed to streamline the candidate referral proce
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/candidate-referral-system.git
-cd candidate-referral-system
+git clone https://github.com/QuickHarsh/Candidate-Referral-Management-System.git
+cd Candidate-Referral-Management-System
 ```
 
 ### 2. Backend Setup
-Navigate to the backend folder and install dependencies:
+Open a new terminal, navigate to the backend folder, and install dependencies:
 ```bash
 cd backend
 npm install
@@ -63,36 +63,31 @@ JWT_EXPIRE=30d
 JWT_COOKIE_EXPIRE=30
 ```
 
-Start the backend server (Admin account will be auto-seeded):
+Start the backend server:
 ```bash
 npm run dev
 ```
 
-### 3. Frontend Setup
-Open new terminal and navigate to the frontend folder and install dependencies:
+### 3. Database Seeding
+To create the **Admin Account** (`admin@worko.com`), run the following command:
+```bash
+npm run seed
+```
+*(This checks if the admin exists and creates it if not. It also resets the password to `Workoadmin123`.)*
+
+### 4. Frontend Setup
+Open a new terminal, navigate to the frontend folder, and install dependencies:
 ```bash
 cd frontend
 npm install
 ```
 
-### 4. Database Seeding (Important)
-To create the **Admin Account** (`admin@worko.com`), run the following command:
-```bash
-npm run seed
-```
-*(This is safe to run multiple times; it will create the admin if missing or reset the password if it exists.)*
-
-## Assumptions & Limitations
-- **Resume Storage:**
-    - In local development, resumes are stored in the `backend/uploads` directory.
-    - **On Render (Free Tier):** Resumes are stored on an *ephemeral* filesystem. This means uploaded files will disappear if the server restarts or redeploys. For a production app, we would use AWS S3 or Google Cloud Storage (as noted in the optional requirements), but for this assignment, local storage was implemented to demonstrate file handling logic.
-- **Email/Phone Validation:** Basic regex is used for validation. In a real-world scenario, we might use stricter libraries or SMS/Email verification.
-```bash
-cd ../frontend
-npm install
+Create a `.env` file in the `frontend` directory:
+```env
+VITE_API_URL=http://localhost:5001
 ```
 
-Start the development server:
+Start the frontend development server:
 ```bash
 npm run dev
 ```
